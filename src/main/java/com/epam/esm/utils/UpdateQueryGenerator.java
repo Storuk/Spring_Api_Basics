@@ -17,7 +17,6 @@ public class UpdateQueryGenerator {
         });
         generatedQuery.append("last_update_date = ? WHERE id = ?");
         updatesParam.addAll(List.of(lastUpdateTime, id));
-
         return Map.of(generatedQuery.toString(), updatesParam);
     }
 }

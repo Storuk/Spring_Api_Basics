@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -81,8 +82,17 @@ public class GiftCertificate {
     }
 
     public GiftCertificate setLastUpdateDate(Date lastUpdateDate) {
-
         this.lastUpdateDate = getDateIso(lastUpdateDate);
+        return this;
+    }
+
+    public GiftCertificate setCreateDate(String createDate) {
+        this.createDate = createDate;
+        return this;
+    }
+
+    public GiftCertificate setLastUpdateDate(String lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
         return this;
     }
 
@@ -107,5 +117,19 @@ public class GiftCertificate {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37).append(id).append(name).append(tags).append(description).append(price).append(duration).append(createDate).append(lastUpdateDate).toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "GiftCertificate{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", tags=" + tags +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", duration=" + duration +
+                ", createDate='" + createDate + '\'' +
+                ", lastUpdateDate='" + lastUpdateDate + '\'' +
+                '}';
     }
 }

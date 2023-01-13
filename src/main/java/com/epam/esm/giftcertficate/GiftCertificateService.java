@@ -2,9 +2,9 @@ package com.epam.esm.giftcertficate;
 
 import com.epam.esm.exceptionhandler.exception.ItemNotFoundException;
 import com.epam.esm.exceptionhandler.exception.ServerException;
-import com.epam.esm.giftcertificatetag.TagGiftCertificateService;
+import com.epam.esm.taggiftcertificate.TagGiftCertificate;
+import com.epam.esm.taggiftcertificate.TagGiftCertificateService;
 import com.epam.esm.tag.Tag;
-import com.epam.esm.tag.TagRepo;
 import com.epam.esm.tag.TagService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -39,13 +39,14 @@ public class GiftCertificateService {
         if (!giftCertificate.isEmpty()) {
             return giftCertificate;
         }
-        throw new ItemNotFoundException("There are no gift certificate with id= " + id);
+        throw new ItemNotFoundException("No gift certificate with id= " + id);
     }
 
-    public void deleteGiftCertificate(long id) {
-        if (!giftCertificateRepo.deleteGiftCertificate(id)) {
-            throw new ItemNotFoundException("No tag with id= " + id);
+    public boolean deleteGiftCertificate(long id) {
+        if (giftCertificateRepo.deleteGiftCertificate(id)) {
+            return true;
         }
+        throw new ItemNotFoundException("No GiftCertificate with id= " + id);
     }
 
     @Transactional
@@ -58,7 +59,7 @@ public class GiftCertificateService {
                     if (!tagService.tagExists(tag.getName())) {
                         tagService.createTag(tag);
                     }
-                    tagGiftCertificateService.createGiftCertificateTag(gift_certificate_id, tagService.getTagId(tag));
+                    tagGiftCertificateService.createGiftCertificateTag(new TagGiftCertificate().setGift_certificate_id(gift_certificate_id).setTag_id(tagService.getTagId(tag)));
                 }
             }
             return true;
@@ -77,7 +78,7 @@ public class GiftCertificateService {
                         if (!tagService.tagExists(tag.getName())) {
                             tagService.createTag(tag);
                         }
-                        tagGiftCertificateService.createGiftCertificateTag(id, tagService.getTagId(tag));
+                        tagGiftCertificateService.createGiftCertificateTag(new TagGiftCertificate().setGift_certificate_id(id).setTag_id(tagService.getTagId(tag)));
                     }
                 }
             } return getGiftCertificateById(id);

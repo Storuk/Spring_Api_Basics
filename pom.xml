@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>module2</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>demo</name>
+    <name>module2</name>
     <packaging>war</packaging>
 
     <properties>
@@ -90,6 +90,7 @@
             <version>1.4.200</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>

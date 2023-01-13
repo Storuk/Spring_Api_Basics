@@ -1,4 +1,4 @@
-package com.epam.esm.giftcertificatetag;
+package com.epam.esm.taggiftcertificate;
 
 import com.epam.esm.giftcertficate.GiftCertificate;
 
@@ -14,5 +14,5 @@ public interface TagGiftCertificateRepo {
     List<GiftCertificate> sortByNameByDateAscDesc(String name, String date);
 
     boolean createGiftCertificateTag(long certificateId, long tagId);
-    void deleteGiftCertificateTag(long certificateId);
+    boolean deleteGiftCertificateTag(long certificateId);
 }

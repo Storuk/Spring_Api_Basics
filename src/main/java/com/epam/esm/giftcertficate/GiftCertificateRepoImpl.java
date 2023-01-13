@@ -1,9 +1,8 @@
 package com.epam.esm.giftcertficate;
 
-import com.epam.esm.DB.SqlQuery;
+import com.epam.esm.utils.SqlQuery;
 import com.epam.esm.tag.Tag;
 import com.epam.esm.utils.UpdateQueryGenerator;
-import com.epam.esm.utils.VerificationOfData;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 

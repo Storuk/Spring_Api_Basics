@@ -1,8 +1,8 @@
-package com.epam.esm.giftcertificatetag;
+package com.epam.esm.taggiftcertificate;
 
 import com.epam.esm.giftcertficate.GiftCertificate;
 import com.epam.esm.tag.Tag;
-import com.epam.esm.DB.SqlQuery;
+import com.epam.esm.utils.SqlQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -45,8 +45,8 @@ public class TagGiftCertificateRepoImpl implements TagGiftCertificateRepo {
     }
 
     @Override
-    public List<GiftCertificate> sortByNameAscDesc(String name){
-        return jdbcTemplate.query(SqlQuery.TagGiftCertificate.sortByName(name), (resultSet, i) ->
+    public List<GiftCertificate> sortByNameAscDesc(String nameSortType){
+        return jdbcTemplate.query(SqlQuery.TagGiftCertificate.sortByName(nameSortType), (resultSet, i) ->
                 new GiftCertificate().setId(resultSet.getLong("id")).
                         setName(resultSet.getString("name")).
                         setDescription(resultSet.getString("description")).
@@ -58,8 +58,8 @@ public class TagGiftCertificateRepoImpl implements TagGiftCertificateRepo {
     }
 
     @Override
-    public List<GiftCertificate> sortByNameByDateAscDesc(String name, String date){
-        return jdbcTemplate.query(SqlQuery.TagGiftCertificate.sortByNameAndDate(name, date),
+    public List<GiftCertificate> sortByNameByDateAscDesc(String nameSortType, String dateSortType){
+        return jdbcTemplate.query(SqlQuery.TagGiftCertificate.sortByNameAndDate(nameSortType, dateSortType),
                 (resultSet, i) -> new GiftCertificate().setId(resultSet.getLong("id")).
                         setName(resultSet.getString("name")).
                         setDescription(resultSet.getString("description")).
@@ -76,8 +76,9 @@ public class TagGiftCertificateRepoImpl implements TagGiftCertificateRepo {
     }
 
     @Override
-    public void deleteGiftCertificateTag(long certificateId) {
+    public boolean deleteGiftCertificateTag(long certificateId) {
         jdbcTemplate.update(SqlQuery.TagGiftCertificate.DELETE_CERTIFICATE_TAG_RELATION, certificateId);
+        return true;
     }
 
     private List<Tag> getAllTagsByCertificateId(long certificateId) {

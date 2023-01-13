@@ -42,7 +42,7 @@ public class TagController {
         if (checkIdZeroValue(id)) {
             return new ResponseEntity<>(Map.of("tag", tagService.getTagById(id)), HttpStatus.OK);
         }
-        throw new ServerException("incorrect tag id=" + id);
+        throw new ServerException("incorrect tag id =" + id);
     }
 
     @DeleteMapping("/{id}")
@@ -51,6 +51,6 @@ public class TagController {
             tagService.deleteTag(id);
             return ResponseEntity.ok(Map.of("status", HttpStatus.OK));
         }
-        throw new ServerException("incorrect tag id=" + id);
+        throw new ServerException("incorrect tag id =" + id);
     }
 }

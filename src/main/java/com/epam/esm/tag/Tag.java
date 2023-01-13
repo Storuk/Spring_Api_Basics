@@ -40,4 +40,12 @@ public class Tag {
     public int hashCode() {
         return new HashCodeBuilder(17, 37).append(id).append(name).toHashCode();
     }
+
+    @Override
+    public String toString() {
+        return "Tag{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

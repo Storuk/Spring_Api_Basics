@@ -4,7 +4,9 @@ import com.epam.esm.giftcertficate.GiftCertificate;
 import com.epam.esm.tag.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -120,6 +122,11 @@ class VerificationOfDataTest {
 
     @Test
     void checkCertificateAndGetListOfFieldsForUpdate() {
+        GiftCertificate giftCertificate = new GiftCertificate().setName("abc").setDescription("desc");
+        Map<String, String> map = new HashMap<>();
+        map.put("name", giftCertificate.getName());
+        map.put("description", giftCertificate.getDescription());
+        assertEquals(map, VerificationOfData.checkCertificateAndGetListOfFieldsForUpdate(giftCertificate));
     }
 
     @Test
@@ -146,7 +153,6 @@ class VerificationOfDataTest {
     @Test
     void isCertificateValidForUpdate_FalseNumericNam() {
         GiftCertificate giftCertificate = new GiftCertificate().setTags(List.of(new Tag().setId(1L).setName("356")));
-        System.out.println(giftCertificate.getTags().toString());
         assertEquals(VerificationOfData.isCertificateValidForUpdate(giftCertificate),"Invalid input tags: " + giftCertificate.getTags().toString());
     }
 

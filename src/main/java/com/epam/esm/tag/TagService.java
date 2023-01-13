@@ -36,14 +36,14 @@ public class TagService {
         if (!tag.isEmpty()) {
             return tag;
         }
-        throw new ItemNotFoundException("No tag with id= " + id);
+        throw new ItemNotFoundException("No tag with id = " + id);
     }
 
     public boolean deleteTag(long id) {
-        if (!tagRepo.deleteTag(id)) {
+        if (tagRepo.deleteTag(id)) {
             return true;
         }
-        throw new ItemNotFoundException("No tag with id= " + id);
+        throw new ItemNotFoundException("No tag with id = " + id);
     }
 
     public boolean tagExists(String name) {
