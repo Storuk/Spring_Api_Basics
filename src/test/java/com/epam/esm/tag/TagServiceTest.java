@@ -1,8 +1,7 @@
 package com.epam.esm.tag;
 
-import com.epam.esm.exceptionhandler.exception.ItemNotFoundException;
-import com.epam.esm.exceptionhandler.exception.ServerException;
-import com.epam.esm.giftcertficate.GiftCertificate;
+import com.epam.esm.exceptions.ItemNotFoundException;
+import com.epam.esm.exceptions.ServerException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,7 +1,7 @@
 package com.epam.esm.tag;
 
-import com.epam.esm.exceptionhandler.exception.ItemNotFoundException;
-import com.epam.esm.exceptionhandler.exception.ServerException;
+import com.epam.esm.exceptions.ItemNotFoundException;
+import com.epam.esm.exceptions.ServerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

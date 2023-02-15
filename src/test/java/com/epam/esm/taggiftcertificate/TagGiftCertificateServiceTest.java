@@ -1,6 +1,6 @@
 package com.epam.esm.taggiftcertificate;
 
-import com.epam.esm.exceptionhandler.exception.ItemNotFoundException;
+import com.epam.esm.exceptions.ItemNotFoundException;
 import com.epam.esm.giftcertficate.GiftCertificate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

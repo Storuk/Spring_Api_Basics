@@ -1,4 +1,4 @@
-package com.epam.esm.exceptionhandler.exception;
+package com.epam.esm.exceptions;
 
 public class ServerException extends RuntimeException {
     public ServerException(String message) {

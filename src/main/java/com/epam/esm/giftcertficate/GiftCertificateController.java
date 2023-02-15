@@ -6,11 +6,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
-import com.epam.esm.exceptionhandler.exception.ServerException;
+import com.epam.esm.exceptions.ServerException;
 
 import static com.epam.esm.utils.VerificationOfData.checkIdZeroValue;
 
+/**
+ * Class GiftCertificateController which contain method related with GiftCertificate
+ * @author Vlad Storoshchuk
+ * */
 @RestController
 @RequestMapping(value = "/certificate", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GiftCertificateController {
@@ -20,11 +25,22 @@ public class GiftCertificateController {
         this.giftCertificateService = giftCertificateService;
     }
 
+    /**
+     * A controller get method for getting all GiftCertificates
+     * @return List of GiftCertificates
+     * @see GiftCertificateService#getAllGiftCertificates()
+     * */
     @GetMapping
     public ResponseEntity<?> getAllCertificates() {
         return ResponseEntity.ok(Map.of("All Gift Certificates", giftCertificateService.getAllGiftCertificates()));
     }
 
+    /**
+     * A controller get method for getting GiftCertificate
+     * @param id - id of GiftCertificate (min value 1)
+     * @return GiftCertificate
+     * @see GiftCertificateService#getGiftCertificateById(long)
+     * */
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getCertificateById(@PathVariable long id) {
         if (checkIdZeroValue(id)) {
@@ -33,6 +49,12 @@ public class GiftCertificateController {
         throw new ServerException("No certificate with id = " + id);
     }
 
+    /**
+     * A controller delete method for deleting GiftCertificate
+     * @param id - id of GiftCertificate for deleting (min value 1)
+     * @return HttpStatus OK
+     * @see GiftCertificateService#deleteGiftCertificate(long)
+     * */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTag(@PathVariable long id) {
         if (checkIdZeroValue(id)) {
@@ -42,6 +64,12 @@ public class GiftCertificateController {
         throw new ServerException("No certificate with id = " + id);
     }
 
+    /**
+     * A controller post method for creating GiftCertificate
+     * @param giftCertificate the GiftCertificate object that will be created in database
+     * @return HttpStatus OK
+     * @see GiftCertificateService#createGiftCertificate(GiftCertificate)
+     * */
     @PostMapping
     public ResponseEntity<?> createCertificate(@RequestBody GiftCertificate giftCertificate) {
         if(VerificationOfData.isNewCertificateValid(giftCertificate)) {
@@ -51,12 +79,18 @@ public class GiftCertificateController {
         throw new ServerException("Invalid data. Check your inputs");
     }
 
+    /**
+     * A controller patch method for updating GiftCertificate
+     * @param id - id of gift certificate (min value 1)
+     * @param giftCertificate the GiftCertificate object for updating giftCertificate
+     * @return updated GiftCertificate
+     * @see GiftCertificateService#updateGiftCertificate(long, GiftCertificate) 
+     * */
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateCertificate(@PathVariable("id") long id, @RequestBody GiftCertificate giftCertificate) {
         if(checkIdZeroValue(id)){
-            Map<String, String> updates = VerificationOfData.checkCertificateAndGetListOfFieldsForUpdate(giftCertificate);
-            if (!updates.isEmpty() || giftCertificate.getTags() != null) {
-                return ResponseEntity.ok(giftCertificateService.updateGiftCertificate(id, giftCertificate.getTags(), updates));
+            if (VerificationOfData.isGiftCertificateValidForUpdate(giftCertificate)) {
+                return ResponseEntity.ok(giftCertificateService.updateGiftCertificate(id, giftCertificate));
             }
             throw new ServerException("Nothing to update. All fields are empty");
         }

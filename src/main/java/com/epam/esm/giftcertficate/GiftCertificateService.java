@@ -1,7 +1,7 @@
 package com.epam.esm.giftcertficate;
 
-import com.epam.esm.exceptionhandler.exception.ItemNotFoundException;
-import com.epam.esm.exceptionhandler.exception.ServerException;
+import com.epam.esm.exceptions.ItemNotFoundException;
+import com.epam.esm.exceptions.ServerException;
 import com.epam.esm.taggiftcertificate.TagGiftCertificate;
 import com.epam.esm.taggiftcertificate.TagGiftCertificateService;
 import com.epam.esm.tag.Tag;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -69,12 +70,12 @@ public class GiftCertificateService {
     }
 
     @Transactional
-    public List<GiftCertificate> updateGiftCertificate(long id, List<Tag> tags, Map<String, String> updatesMap) {
-        if (giftCertificateRepo.updateGiftCertificate(id, updatesMap)) {
-            if (tags != null) {
+    public List<GiftCertificate> updateGiftCertificate(long id, GiftCertificate giftCertificate) {
+        if (giftCertificateRepo.updateGiftCertificate(id, generateMapForUpdate(giftCertificate))) {
+            if (giftCertificate.getTags() != null) {
                 tagGiftCertificateService.deleteGiftCertificateTag(id);
-                if (!tags.isEmpty()) {
-                    for(Tag tag: tags) {
+                if (!giftCertificate.getTags().isEmpty()) {
+                    for(Tag tag: giftCertificate.getTags()) {
                         if (!tagService.tagExists(tag.getName())) {
                             tagService.createTag(tag);
                         }
@@ -85,5 +86,22 @@ public class GiftCertificateService {
         } else {
             throw new ItemNotFoundException("There is no gift certificate to update with id= " + id);
         }
+    }
+
+    private Map<String, String> generateMapForUpdate(GiftCertificate giftCertificate) {
+        Map<String, String> map = new HashMap<>();
+        if (giftCertificate.getName() != null) {
+            map.put("name", giftCertificate.getName());
+        }
+        if (giftCertificate.getDescription() != null) {
+            map.put("description", giftCertificate.getDescription());
+        }
+        if (giftCertificate.getPrice() != null && giftCertificate.getPrice() > 0) {
+            map.put("price", String.valueOf(giftCertificate.getPrice()));
+        }
+        if (giftCertificate.getDuration() != null && giftCertificate.getDuration() > 0) {
+            map.put("duration", String.valueOf(giftCertificate.getDuration()));
+        }
+        return map;
     }
 }

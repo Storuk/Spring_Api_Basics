@@ -1,7 +1,7 @@
 package com.epam.esm.giftcertficate;
 
-import com.epam.esm.exceptionhandler.exception.ItemNotFoundException;
-import com.epam.esm.exceptionhandler.exception.ServerException;
+import com.epam.esm.exceptions.ItemNotFoundException;
+import com.epam.esm.exceptions.ServerException;
 import com.epam.esm.taggiftcertificate.TagGiftCertificate;
 import com.epam.esm.taggiftcertificate.TagGiftCertificateService;
 import com.epam.esm.tag.Tag;
@@ -123,9 +123,10 @@ class GiftCertificateServiceTest {
     @Test
     void updateGiftCertificate() {
         List<Tag> tagList = List.of();
+        GiftCertificate giftCertificate = new GiftCertificate();
         Map<String, String> updatesMap = new HashMap<>();
         when(giftCertificateRepoMock.updateGiftCertificate(1L,updatesMap)).thenReturn(true);
         when(giftCertificateRepoMock.getGiftCertificateById(1L)).thenReturn(List.of(new GiftCertificate()));
-        assertEquals(List.of(new GiftCertificate()),giftCertificateServiceMock.updateGiftCertificate(1L, tagList, updatesMap));
+        assertEquals(List.of(giftCertificate),giftCertificateServiceMock.updateGiftCertificate(1L, giftCertificate));
     }
 }

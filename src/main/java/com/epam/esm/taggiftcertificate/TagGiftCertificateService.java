@@ -1,6 +1,6 @@
 package com.epam.esm.taggiftcertificate;
 
-import com.epam.esm.exceptionhandler.exception.ItemNotFoundException;
+import com.epam.esm.exceptions.ItemNotFoundException;
 import com.epam.esm.giftcertficate.GiftCertificate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

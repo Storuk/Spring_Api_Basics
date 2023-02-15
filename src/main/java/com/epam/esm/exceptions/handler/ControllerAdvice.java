@@ -1,10 +1,9 @@
-package com.epam.esm.exceptionhandler.handler;
+package com.epam.esm.exceptions.handler;
 
-import com.epam.esm.exceptionhandler.exception.ItemNotFoundException;
+import com.epam.esm.exceptions.ItemNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -12,8 +11,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.sql.SQLSyntaxErrorException;
 import java.util.Map;
 
-@ControllerAdvice
-public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
+@org.springframework.web.bind.annotation.ControllerAdvice
+public class ControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {IllegalArgumentException.class, IllegalStateException.class})
     protected ResponseEntity<?> handleConflictException(RuntimeException ex, WebRequest request) {

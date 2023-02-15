@@ -3,7 +3,7 @@ package com.epam.esm.utils;
 import com.epam.esm.giftcertficate.GiftCertificate;
 import com.epam.esm.tag.Tag;
 import org.apache.commons.lang3.StringUtils;
-import com.epam.esm.exceptionhandler.exception.ServerException;
+import com.epam.esm.exceptions.ServerException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +18,7 @@ public class VerificationOfData {
     }
 
     public static boolean isStringValid(String obj) {
-        return obj != null && !StringUtils.isBlank(obj) && !StringUtils.isEmpty(obj) && !StringUtils.isNumeric(obj);
+        return obj != null && !StringUtils.isBlank(obj) && !StringUtils.isNumeric(obj);
     }
 
     public static boolean isSortingTypeCorrect(String method) {
@@ -43,38 +43,25 @@ public class VerificationOfData {
         return true;
     }
 
-    public static Map<String, String> checkCertificateAndGetListOfFieldsForUpdate(GiftCertificate giftCertificate) {
-        Map<String, String> map = new HashMap<>();
-        String dataValid = isCertificateValidForUpdate(giftCertificate);
-        if(dataValid.isEmpty()) {
-            if (giftCertificate.getName() != null) {
-                map.put("name", giftCertificate.getName());
-            }
-            if (giftCertificate.getDescription() != null) {
-                map.put("description", giftCertificate.getDescription());
-            }
-            if (giftCertificate.getPrice() != null && giftCertificate.getPrice() > 0) {
-                map.put("price", String.valueOf(giftCertificate.getPrice()));
-            }
-            if (giftCertificate.getDuration() != null && giftCertificate.getDuration() > 0) {
-                map.put("duration", String.valueOf(giftCertificate.getDuration()));
-            }
-            return map;
-        }
-        throw new ServerException(dataValid);
-    }
-
-    public static String isCertificateValidForUpdate(GiftCertificate giftCertificate) {
-        String dataValid = "";
+    public static boolean isGiftCertificateValidForUpdate(GiftCertificate giftCertificate) {
         if (giftCertificate != null) {
-            if (giftCertificate.getName() != null && StringUtils.isNumeric(giftCertificate.getName())){
-                dataValid += "Invalid input name: " + giftCertificate.getName();
+            if (giftCertificate.getName() != null && !isStringValid(giftCertificate.getName())){
+                throw new ServerException("Invalid input name: " + giftCertificate.getName());
+            }
+            if (giftCertificate.getDescription() != null && !isStringValid(giftCertificate.getDescription())) {
+                throw new ServerException("Invalid input description: " + giftCertificate.getDescription());
+            }
+            if (giftCertificate.getPrice() != null && giftCertificate.getPrice() <= 0) {
+                throw new ServerException("Price should be > 0. Your value " + giftCertificate.getPrice());
+            }
+            if (giftCertificate.getDuration() != null && giftCertificate.getDuration() <= 0) {
+                throw new ServerException("Duration should be > 0. Your value " + giftCertificate.getDuration());
             }
             if (giftCertificate.getTags() != null && !isListOfTagsCorrect(giftCertificate.getTags())){
-                dataValid += "Invalid input tags: " + giftCertificate.getTags().toString();
+                throw new ServerException("Invalid input tags." + giftCertificate.getTags());
             }
-            return dataValid;
+            return true;
         }
-        return "Can not make update. Your GiftCertificate is empty.";
+        return false;
     }
 }

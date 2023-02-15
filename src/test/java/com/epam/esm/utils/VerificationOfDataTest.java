@@ -1,5 +1,6 @@
 package com.epam.esm.utils;
 
+import com.epam.esm.exceptions.ServerException;
 import com.epam.esm.giftcertficate.GiftCertificate;
 import com.epam.esm.tag.Tag;
 import org.junit.jupiter.api.Test;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -121,39 +123,60 @@ class VerificationOfDataTest {
     }
 
     @Test
-    void checkCertificateAndGetListOfFieldsForUpdate() {
-        GiftCertificate giftCertificate = new GiftCertificate().setName("abc").setDescription("desc");
-        Map<String, String> map = new HashMap<>();
-        map.put("name", giftCertificate.getName());
-        map.put("description", giftCertificate.getDescription());
-        assertEquals(map, VerificationOfData.checkCertificateAndGetListOfFieldsForUpdate(giftCertificate));
+    void isGiftCertificateValidForUpdateTestTrue() {
+        GiftCertificate giftCertificate = new GiftCertificate()
+                .setName("certificate").setDescription("certificate").setPrice(1).setDuration(1)
+                .setTags(List.of(new Tag().setName("2ha2rd1"),
+                        new Tag().setName("exp12"),
+                        new Tag().setName("yep37")));
+        assertTrue(VerificationOfData.isGiftCertificateValidForUpdate(giftCertificate));
     }
 
     @Test
-    void isCertificateValidForUpdate_True() {
-        List<GiftCertificate> trueCertificates = List.of(new GiftCertificate().setName("cheap").setTags(null),
-                new GiftCertificate().setName(null).setTags(List.of(new Tag().setName("abc"), new Tag().setName("1a2b3c"), new Tag().setName("AbEc#"))));
-        for(GiftCertificate giftCertificate: trueCertificates) {
-            assertEquals(VerificationOfData.isCertificateValidForUpdate(giftCertificate),"");
-        }
+    void isGiftCertificateValidForUpdateTestFalse_WhenNull() {
+        assertFalse(VerificationOfData.isGiftCertificateValidForUpdate(null));
     }
 
     @Test
-    void isCertificateValidForUpdate_FalseNullCertificate() {
-        GiftCertificate giftCertificate = null;
-        assertEquals(VerificationOfData.isCertificateValidForUpdate(giftCertificate),"Can not make update. Your GiftCertificate is empty.");
-    }
-
-    @Test
-    void isCertificateValidForUpdate_FalseNumericName() {
+    void isGiftCertificateValidForUpdateTestFalse_WhenInvalidName() {
         GiftCertificate giftCertificate = new GiftCertificate().setName("123");
-        assertEquals(VerificationOfData.isCertificateValidForUpdate(giftCertificate),"Invalid input name: 123");
+        ServerException message = assertThrows(ServerException.class,
+                () -> VerificationOfData.isGiftCertificateValidForUpdate(giftCertificate));
+        assertEquals("Invalid input name: " + giftCertificate.getName(),message.getMessage());
     }
 
     @Test
-    void isCertificateValidForUpdate_FalseNumericNam() {
-        GiftCertificate giftCertificate = new GiftCertificate().setTags(List.of(new Tag().setId(1L).setName("356")));
-        assertEquals(VerificationOfData.isCertificateValidForUpdate(giftCertificate),"Invalid input tags: " + giftCertificate.getTags().toString());
+    void isGiftCertificateValidForUpdateTestFalse_WhenInvalidDescription() {
+        GiftCertificate giftCertificate = new GiftCertificate().setDescription("  ");
+        ServerException message = assertThrows(ServerException.class,
+                () -> VerificationOfData.isGiftCertificateValidForUpdate(giftCertificate));
+        assertEquals("Invalid input description: " + giftCertificate.getDescription(),message.getMessage());
     }
 
+    @Test
+    void isGiftCertificateValidForUpdateTestFalse_WhenInvalidPrice() {
+        GiftCertificate giftCertificate =  new GiftCertificate().setPrice(-1);
+        ServerException message = assertThrows(ServerException.class,
+                () -> VerificationOfData.isGiftCertificateValidForUpdate(giftCertificate));
+        assertEquals("Price should be > 0. Your value " + giftCertificate.getPrice(),message.getMessage());
+    }
+
+    @Test
+    void isGiftCertificateValidForUpdateTestFalse_WhenInvalidDuration() {
+        GiftCertificate giftCertificate = new GiftCertificate().setDuration(-1);
+        ServerException message = assertThrows(ServerException.class,
+                () -> VerificationOfData.isGiftCertificateValidForUpdate(giftCertificate));
+        assertEquals("Duration should be > 0. Your value " + giftCertificate.getDuration(),message.getMessage());
+    }
+
+    @Test
+    void isGiftCertificateValidForUpdateTestFalse_WhenInvalidTags() {
+        GiftCertificate giftCertificate = new GiftCertificate()
+                .setTags(List.of(new Tag().setName(" "),
+                        new Tag().setName(null),
+                        new Tag().setName("356")));
+        ServerException message = assertThrows(ServerException.class,
+                () -> VerificationOfData.isGiftCertificateValidForUpdate(giftCertificate));
+        assertEquals("Invalid input tags." + giftCertificate.getTags(),message.getMessage());
+    }
 }
